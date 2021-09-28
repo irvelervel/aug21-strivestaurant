@@ -4,6 +4,7 @@ import Carousel from 'react-bootstrap/Carousel'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import ListGroup from 'react-bootstrap/ListGroup'
 import dishes from '../data/menu.json'
 
 // for showing the comments of a given dish, I need to find a way of SELECTING and
@@ -20,10 +21,24 @@ class Home extends Component {
     // initial state
     state = {
         selectedDish: null,
-        stefano: ''
+        // every time I click on a slide, from null I will assign a value
+        // the value will be one of the pasta objects, depending on what I clicked on!
+        // stefano: ''
     }
 
     render() {
+        // the PROPS are an object filled with "custom attributes" we enrich our component with
+        // upon invokation: so they come from OUTSIDE, they cannot be set inside the component itself
+        // the STATE instead is an object we can mantain and set from INSIDE the component, and
+        // it's not accessible from outside
+        // console.log(this)
+
+        // if (this.props.myFunction) {
+        //     this.props.myFunction()
+        // }
+
+        // this.props.myFunction && this.props.myFunction()
+
         // render is ALWAYS MANDATORY in a class component
         return (
             // we should still provide a container
@@ -41,7 +56,7 @@ class Home extends Component {
                                             src={dish.image}
                                             alt="First slide"
                                             onClick={() => this.setState({
-                                                stefano: 'teacher'
+                                                selectedDish: dish
                                             })}
                                         />
                                         <Carousel.Caption>
@@ -52,6 +67,34 @@ class Home extends Component {
                                 ))
                             }
                         </Carousel>
+                    </Col>
+                </Row>
+                <Row className="my-4 justify-content-center">
+                    <Col xs={12} md={6} className="text-center">
+                        <ListGroup>
+                            {
+                                // we have to check selectedDish before trying to access
+                                // its comments because it can be null!!
+                                // -> if we access something out of null... crash!
+                                this.state.selectedDish
+                                    ? this.state.selectedDish.comments.map(c => (
+                                        <ListGroup.Item key={c.id}>{c.comment}</ListGroup.Item>
+                                    ))
+                                    : <ListGroup.Item>Select a dish!</ListGroup.Item>
+                            }
+                            {/* {
+                                !this.state.selectedDish && <ListGroup.Item>Select a dish!</ListGroup.Item>
+                            }
+                            {
+                                this.state.selectedDish &&
+                                // the && is called 'short-circuit'
+                                // if the selectedDish is !null, the second part
+                                // of the statement will get executed
+                                this.state.selectedDish.comments.map(c => (
+                                    <ListGroup.Item key={c.id}>{c.comment}</ListGroup.Item>
+                                ))
+                            } */}
+                        </ListGroup>
                     </Col>
                 </Row>
             </Container>

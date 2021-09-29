@@ -4,8 +4,9 @@ import Carousel from 'react-bootstrap/Carousel'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import ListGroup from 'react-bootstrap/ListGroup'
 import dishes from '../data/menu.json'
+import DishComments from './DishComments'
+import ReservationForm from './ReservationForm'
 
 // for showing the comments of a given dish, I need to find a way of SELECTING and
 // remembering the last pasta I clicked on
@@ -24,6 +25,7 @@ class Home extends Component {
         // every time I click on a slide, from null I will assign a value
         // the value will be one of the pasta objects, depending on what I clicked on!
         // stefano: ''
+        title: 'Welcome to Strivestaurant!'
     }
 
     render() {
@@ -43,10 +45,15 @@ class Home extends Component {
         return (
             // we should still provide a container
             <Container>
+                <Row className="my-4 justify-content-center">
+                    <Col xs={12} md={6} className="text-center">
+                        <ReservationForm />
+                    </Col>
+                </Row>
                 <Row className="justify-content-center" style={{ marginTop: '1em' }}>
                     <Col xs={12} md={6} className="text-center">
-                        <h1>Welcome to Strivestaurant!</h1>
-                        <h3>We can only serve pasta</h3>
+                        <h1>{this.state.title}</h1>
+                        <h3 onClick={() => { this.setState({ title: 'Hello Hilary!' }) }}>We can only serve pasta</h3>
                         <Carousel className="mt-4">
                             {
                                 dishes.map(dish => (
@@ -71,30 +78,7 @@ class Home extends Component {
                 </Row>
                 <Row className="my-4 justify-content-center">
                     <Col xs={12} md={6} className="text-center">
-                        <ListGroup>
-                            {
-                                // we have to check selectedDish before trying to access
-                                // its comments because it can be null!!
-                                // -> if we access something out of null... crash!
-                                this.state.selectedDish
-                                    ? this.state.selectedDish.comments.map(c => (
-                                        <ListGroup.Item key={c.id}>{c.comment}</ListGroup.Item>
-                                    ))
-                                    : <ListGroup.Item>Select a dish!</ListGroup.Item>
-                            }
-                            {/* {
-                                !this.state.selectedDish && <ListGroup.Item>Select a dish!</ListGroup.Item>
-                            }
-                            {
-                                this.state.selectedDish &&
-                                // the && is called 'short-circuit'
-                                // if the selectedDish is !null, the second part
-                                // of the statement will get executed
-                                this.state.selectedDish.comments.map(c => (
-                                    <ListGroup.Item key={c.id}>{c.comment}</ListGroup.Item>
-                                ))
-                            } */}
-                        </ListGroup>
+                        <DishComments selectedDish={this.state.selectedDish} />
                     </Col>
                 </Row>
             </Container>

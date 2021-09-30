@@ -19,7 +19,7 @@ class ReservationForm extends React.Component {
             smoking: false,
             dateTime: '',
             specialRequests: '',
-        },
+        }
     }
 
     handleInput = (propertyName, value) => {
@@ -36,7 +36,7 @@ class ReservationForm extends React.Component {
         // now how can we access the form input value?
         console.log(this.state.reservation)
         try {
-            let response = await fetch('https://striveschool-api.herokuapp.com/api/rafael', {
+            let response = await fetch('https://striveschool-api.herokuapp.com/api/reservation', {
                 method: 'POST',
                 body: JSON.stringify(this.state.reservation),
                 headers: {
@@ -63,6 +63,14 @@ class ReservationForm extends React.Component {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    isFormComplete = () => {
+        return (
+            this.state.reservation.name.length > 0 &&
+            this.state.reservation.phone.length > 0 &&
+            this.state.reservation.dateTime.length > 0
+        )
     }
 
     render() {
@@ -119,7 +127,8 @@ class ReservationForm extends React.Component {
                             checked={this.state.reservation.smoking}
                             type="checkbox"
                             onChange={e => this.handleInput('smoking', e.target.checked)}
-                            label="Do you smoke?" />
+                            label="Do you smoke?"
+                        />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Date and Time</Form.Label>
@@ -138,7 +147,7 @@ class ReservationForm extends React.Component {
                             type="text"
                             placeholder="Enter your special requests here" />
                     </Form.Group>
-                    <Button variant="primary" type="submit">
+                    <Button disabled={!this.isFormComplete()} variant="primary" type="submit">
                         Submit
                     </Button>
                 </Form>

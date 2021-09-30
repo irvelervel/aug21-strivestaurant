@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col'
 import dishes from '../data/menu.json'
 import DishComments from './DishComments'
 import ReservationForm from './ReservationForm'
-import Reservations from './Reservations'
 
 // for showing the comments of a given dish, I need to find a way of SELECTING and
 // remembering the last pasta I clicked on
@@ -46,11 +45,6 @@ class Home extends Component {
         return (
             // we should still provide a container
             <Container>
-                <Row className="my-4 justify-content-center">
-                    <Col xs={12} md={6} className="text-center">
-                        <Reservations />
-                    </Col>
-                </Row>
                 <Row className="my-4 justify-content-center">
                     <Col xs={12} md={6} className="text-center">
                         <ReservationForm />

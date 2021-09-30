@@ -20,23 +20,57 @@ class Reservations extends Component {
     // componentDidMount happens JUST ONCE for the whole lifecycle of the component
     // because of this it's the PERFECT PLACE for EXPENSIVE OPERATIONS (i.e. fetches)
 
-    componentDidMount() {
+    fetchReservations = async () => {
+        try {
+            let response = await fetch('https://striveschool-api.herokuapp.com/api/reservation')
+            if (response.ok) {
+                let data = await response.json()
+                console.log(data)
+                this.setState({
+                    reservations: data
+                })
+            } else {
+                console.log('an error happened in the fetch!')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    zee = () => {
+        let array = ['Strive']
+        return array
+    }
+
+    componentDidMount = async () => {
         // here I can write my code, being sure that it will be executed:
         // 1) just once!
         // 2) immediately after the initial invocation of render()
         console.log('this is componentDidMount!')
         // here we're going to do the fetch...
+        this.fetchReservations()
+        console.log(this.zee())
     }
 
     render() {
         console.log('this is the render!')
+
+        // if you set whatever state into render(), you immediately call render() again!
+        // this will ALWAYS lead to an infinite loop!
+        // this.setState({
+        //     name: 'Stefano'
+        // })
+
+        // render fires MANY times!
+        // initially, but also whenever a change is detected in the STATE or in the PROPS
+        // of this component!
         return (
             <>
                 <h3>RESERVATIONS</h3>
                 <ListGroup>
                     {
                         this.state.reservations.map(r => (
-                            <ListGroup.Item>{r.name}</ListGroup.Item>
+                            <ListGroup.Item key={r._id}>{r.name}</ListGroup.Item>
                         ))
                     }
                 </ListGroup>

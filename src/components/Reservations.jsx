@@ -4,6 +4,7 @@ import { Component } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
+import { format, parseISO } from 'date-fns'
 
 class Reservations extends Component {
 
@@ -94,11 +95,22 @@ class Reservations extends Component {
                     this.state.isLoading && <Spinner animation="border" variant="success" />
                 }
                 <ListGroup>
+                    {/* 
+                        for formatting our dateTime string in a better format, we'll use date-fns
+                        two steps:
+                        1) create a Date object out of r.dateTime using parseISO
+                        2) create a new string for our DOM using format, in the way we like
+                    */}
                     {
                         this.state.reservations.length === 0 && !this.state.isLoading
                             ? <ListGroup.Item>NO RESERVATIONS SAVED!</ListGroup.Item>
                             : this.state.reservations.map(r => (
-                                <ListGroup.Item key={r._id}>{r.name}</ListGroup.Item>
+                                <ListGroup.Item key={r._id}>{r.name}
+                                    {' '} for {' ' + r.numberOfPeople + ' '}
+                                    {/* parseISO takes a string and returns a Date object */}
+                                    {/* format takes 2 arguments: the Date object and the string representing 
+                                    the format you want the date to be printed with */}
+                                    - {format(parseISO(r.dateTime), 'MMMM do yyyy | HH:mm')}</ListGroup.Item>
                             ))
                     }
                 </ListGroup>

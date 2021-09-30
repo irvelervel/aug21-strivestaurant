@@ -2,6 +2,8 @@
 
 import { Component } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 
 class Reservations extends Component {
 
@@ -13,7 +15,9 @@ class Reservations extends Component {
 
     state = {
         // the reservations will come in an array of objects
-        reservations: []
+        reservations: [],
+        isLoading: true,
+        isError: false
     }
 
     // componentDidMount is a lifecycle method happening AFTER the initial render
@@ -27,13 +31,25 @@ class Reservations extends Component {
                 let data = await response.json()
                 console.log(data)
                 this.setState({
-                    reservations: data
+                    reservations: data,
+                    isLoading: false,
+                    isError: false
                 })
             } else {
+                // we'll fall here if the URL is mispelled or if the server has a problem
                 console.log('an error happened in the fetch!')
+                this.setState({
+                    isLoading: false,
+                    isError: true
+                })
             }
         } catch (error) {
+            // this is for a more generic error, something like an internet issue
             console.log(error)
+            this.setState({
+                isLoading: false,
+                isError: true
+            })
         }
     }
 
@@ -67,11 +83,23 @@ class Reservations extends Component {
         return (
             <>
                 <h3>RESERVATIONS</h3>
+                {
+                    this.state.isError && (
+                        <Alert variant="danger">
+                            Aww snap, we got an error! :(
+                        </Alert>
+                    )
+                }
+                {
+                    this.state.isLoading && <Spinner animation="border" variant="success" />
+                }
                 <ListGroup>
                     {
-                        this.state.reservations.map(r => (
-                            <ListGroup.Item key={r._id}>{r.name}</ListGroup.Item>
-                        ))
+                        this.state.reservations.length === 0 && !this.state.isLoading
+                            ? <ListGroup.Item>NO RESERVATIONS SAVED!</ListGroup.Item>
+                            : this.state.reservations.map(r => (
+                                <ListGroup.Item key={r._id}>{r.name}</ListGroup.Item>
+                            ))
                     }
                 </ListGroup>
             </>

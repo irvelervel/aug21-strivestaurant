@@ -10,7 +10,7 @@ const MyNavbar = (props) => (
             <Nav className="ml-auto">
                 <Nav.Link href="#features">Menu</Nav.Link>
                 <Nav.Link href="#pricing">Reservations</Nav.Link>
-                <Nav.Link href="#pricing">Contact us</Nav.Link>
+                <Nav.Link href="#somethingelse">Contact us</Nav.Link>
             </Nav>
         </Navbar.Collapse>
     </Navbar>
